@@ -1,25 +1,30 @@
-const AfricasTalking = require('africastalking');
+require("dotenv").config();
 
-// TODO: Initialize Africa's Talking
-const africastalking = AfricasTalking({
-	apiKey: 'b5bb4c5377e395698cad78473fc9e14bef92a58d906c7b9d580819ed5f5ee7d7', 
-	username: 'Dorothy'
-});
-
-
-
-module.exports = async function sendSMS() {
-    
-    // TODO: Send message
-    try {
-        const result=await africastalking.SMS.send({
-            to: ' [30261]',
-            message: 'Hey Girls...',
-            from: '[+254721756109]'
-        });
-        console.log(result);
-    } catch(ex) {
-        console.error(ex);
-    } 
- 
+const credentials = {
+  apiKey: process.env.API_KEY,
+  username: "sandbox",
 };
+
+console.log(process.env.USERNAME);
+console.log(process.env.API_KEY);
+
+const africasTalking = require("africastalking")(credentials);
+
+// Initialize a service e.g. SMS
+const sms = africasTalking.SMS;
+
+// Use the service
+const options = {
+  to: ["+254726158347", "+254716293710"],
+  message: "Hello this is dummy message",
+};
+
+// Send message and capture the response or error
+sms
+  .send(options)
+  .then((response) => {
+    console.log(response.SMSMessageData.Recipients[0]);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
